@@ -43,7 +43,7 @@
   {{ option | json }}{% if options_i < options_size %},{% endif %}
 {% endfor %}
 ],
-"price": {{ product.price | json }},
+"price": {{ product.selected_or_first_available_variant.price | json }},
 "product_type": {{ product.type | json }},
 "published_at": "{{ product.published_at }}",
 "tags": {{ product.tags | join: ', ' | json }},

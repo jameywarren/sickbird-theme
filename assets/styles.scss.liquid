@@ -821,6 +821,9 @@ a span {
   text-decoration: none;
   position: relative;
   transition: color .1s linear;
+  &.action_button.add_to_cart {border-radius: 44px;
+    >span {color: white;}
+  }
 }
 
 a:hover,
@@ -2626,7 +2629,7 @@ a.button,
     }
   }
 
-  button .checkmark {
+  button .checkmark, a.add_to_cart .checkmark {
     position: absolute;
     top: 0;
     left: 0;

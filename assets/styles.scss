@@ -779,6 +779,9 @@ a span {
   text-decoration: none;
   position: relative;
   transition: color .1s linear;
+  &.action_button.add_to_cart {border-radius: 44px;
+    >span {color: white;}
+  }
 }
 
 a:hover,
@@ -1263,9 +1266,9 @@ select.currencies {
   padding-bottom: 0;
   cursor: pointer;
   @if (lightness(#e6e6e6) > 50) {
-    background-image: url(//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/select.png?15333687530454090110); // Lighter background
+    background-image: url(//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/select.png?12867330347279972389); // Lighter background
   } @else {
-    background-image: url(//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/select_light.png?15333687530454090110); // Darker background
+    background-image: url(//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/select_light.png?12867330347279972389); // Darker background
   }
   @include respond-to('medium'){
     font-size: 16px;
@@ -2552,7 +2555,7 @@ a.button,
     }
   }
 
-  button .checkmark {
+  button .checkmark, a.add_to_cart .checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -3010,7 +3013,7 @@ select::-ms-expand {
 }
 
 select {
-  background: #fff url(//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/select.png?15333687530454090110) no-repeat 96% 50%;
+  background: #fff url(//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/select.png?12867330347279972389) no-repeat 96% 50%;
   background-size: 18px 12px;
   
     padding: 8px 14px 8px;
@@ -4736,7 +4739,7 @@ div.section { margin: 10px 0; }
   height: 0;
   width: 0;
   transition: all 0.3s linear;
-  background: url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/loader.gif') center center no-repeat;
+  background: url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/loader.gif') center center no-repeat;
   background-size: 32px 32px;
   margin: 0 auto;
 }
@@ -7411,11 +7414,11 @@ or wrap each row of columns in a <div class="row"> */
 
 @font-face {
   font-family: 'turbo';
-  src: url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/turbo.eot?15333687530454090110');
-  src: url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/turbo.eot?15333687530454090110') format('embedded-opentype'),
-       url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/turbo.woff?15333687530454090110') format('woff'),
-       url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/turbo.ttf?15333687530454090110') format('truetype'),
-       url('//cdn.shopify.com/s/files/1/2682/9360/t/12/assets/turbo.svg?15333687530454090110') format('svg');
+  src: url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/turbo.eot?12867330347279972389');
+  src: url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/turbo.eot?12867330347279972389') format('embedded-opentype'),
+       url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/turbo.woff?12867330347279972389') format('woff'),
+       url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/turbo.ttf?12867330347279972389') format('truetype'),
+       url('//cdn.shopify.com/s/files/1/2682/9360/t/14/assets/turbo.svg?12867330347279972389') format('svg');
   font-weight: normal;
   font-style: normal;
 }
