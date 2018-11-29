@@ -7,10 +7,10 @@
 <div class="container social-feeds-wrap">
   <div class="section clearfix homepage_content">
     {% for block in section.blocks %}
+      {% assign blockLength = forloop.length %}
       {% if block.type == 'instagram' %}
-
-        <div class="{% if forloop.length > 1 %}eight{% else %}sixteen{% endif %} columns" {{ block.shopify_attributes }}>
-          <h2 class="title insta {% if forloop.length == 1 %}center{% endif %}">
+        <div class="block__{{ block.type }} {% if blockLength > 1 %}eight{% else %}sixteen{% endif %} columns equal-columns--outside-trim" {{ block.shopify_attributes }}>
+          <h2 class="title insta {% if blockLength == 1 %}center{% endif %}">
             {% if settings.instagram_link != blank %}
               <a href="{{ settings.instagram_link }}" target="_blank">
             {% endif %}
@@ -24,11 +24,11 @@
           {% endif %}
 
           {% if block.settings.instagram_client_id != blank %}
-            <div id="instafeed" class="js-instafeed" data-client-id="{{ block.settings.instagram_client_id | strip }}" data-count="{{ block.settings.instagram_count }}"></div>
+            <div id="instafeed" class="js-instafeed" data-client-id="{{ block.settings.instagram_client_id | strip }}" data-count="{{ block.settings.instagram_count }}" data-column="{% if blockLength > 1 %}eight{% else %}four{% endif %}"></div>
           {% else %}
             <div id="instafeed" class="clearfix placeholder-instagram">
               {% for i in (1..block.settings.instagram_count) %}
-                <div class="four columns instagram__item">
+                <div class="{% if blockLength > 1 %}eight{% else %}four{% endif %} columns instagram__item small-down--one-whole">
                   <a href="#" class="instagram__link">
                     {{ 'image' | placeholder_svg_tag: 'placeholder-svg placeholder-svg--instagram' }}
                   </a>

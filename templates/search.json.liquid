@@ -24,8 +24,10 @@
       {% assign priceVaries = item.price_varies | json %}
       {% assign priceMin = item.price_min | json %}
     {% elsif item.object_type == 'article' %}
-      {% assign imgSrc = item.image.src | img_url: '200x' | json %}
-      {% assign textContent = item.excerpt | truncatewords: 5 | json %}
+      {% if item.image.src != blank %}
+        {% assign imgSrc = item.image.src | img_url: '200x' | json %}
+      {% endif %}
+      {% assign textContent = item.excerpt | strip_html | truncatewords: 5 | json %}
       {% assign available = true %}
     {% elsif item.object_type == 'page' %}
       {% assign available = true %}

@@ -4,6 +4,11 @@
 - Uses blocks
 {% endcomment %}
 
+{% if section.settings.wide_display == false %}
+    <div class="container">
+      <div class="sixteen columns">
+  {% endif %}
+
 {% if section.blocks.size > 0 %}
   <section class="collection-in-detail">
       <div class="clearfix frontpage_product_stagger--{{ section.settings.frontpage_product_stagger }}" itemtype="http://schema.org/ItemList">
@@ -65,8 +70,10 @@
                 <a href="{{ product.url }}">{{ product.title }}</a>
               </h1>
 
-              {% if settings.enable_shopify_product_badges and settings.enable_shopify_review_comments %}
-                <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+              {% if section.settings.enable_shopify_product_badges %}
+                <div class="shopify-reviews reviewsVisibility--{{settings.enable_shopify_review_comments}}">
+                  <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                </div>
               {% endif %}
               <div class="feature_divider"></div>
 
@@ -99,7 +106,7 @@
                   <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
                   <meta itemprop="seller" content="{{ shop.name | escape }}" />
                   <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
-                  <meta itemprop="itemCondition" content="New" />
+                  <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
 
                   <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
                   <span itemprop="price" content="{{ variant.price | money_without_currency }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
@@ -178,12 +185,23 @@
   </section>
 {% endif %}
 
+{% if section.settings.wide_display == false %}
+    </div>
+  </div>
+{% endif %}
+
 {% schema %}
 {
   "name": "Featured products",
   "class": "featured-products-section",
   "max_blocks": 12,
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
+    },
     {
       "type": "checkbox",
       "id": "frontpage_product_stagger",
@@ -233,6 +251,13 @@
       "type": "checkbox",
       "id": "display_vendor",
       "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shopify_product_badges",
+      "label": "Display star rating on product",
+      "info": "Reviews app must be enabled [(?)](https://help.outofthesandbox.com/hc/en-us/articles/360008549274#section2)",
+      "default": false
     },
     {
       "type": "checkbox",

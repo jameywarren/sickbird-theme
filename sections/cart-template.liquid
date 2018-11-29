@@ -2,7 +2,7 @@
 ** Cart page - default view **
 - Template section
 {% endcomment %}
-
+<div class="container main content">
 <a name="pagecontent" id="pagecontent"></a>
 
 <div class="section clearfix">
@@ -15,7 +15,7 @@
 {% if cart.item_count == 0 %}
   <div class="sixteen columns">
     <div class="section clearfix">
-      <div class="six columns offset-by-five">
+      <div class="six columns offset-by-five medium-down--one-whole">
         <p class="quote">{{ 'cart.general.continue_browsing_html' | t }}</p>
 
         <a href="{% if cart.items.first.product.collections != blank %}{{ cart.items.first.product.collections.last.url }}{% else %}/collections/all{% endif %}" class="action_button continue-button add_to_cart">{{ 'cart.general.continue_shopping_link_html' | t }}</a>
@@ -27,7 +27,7 @@
 
   <form action="/cart" method="post" id="cart_form">
     <div class="section clearfix">
-      <div class="ten columns">
+      <div class="eleven columns medium-down--one-whole">
         {% assign total_saving = 0 %}
         {% for item in cart.items %}
           {% if item.variant.compare_at_price > item.variant.price %}
@@ -36,7 +36,7 @@
           {% endif %}
 
           <div class="section clearfix">
-            <div class="three columns alpha">
+            <div class="five columns alpha">
               <a href="{{ item.url }}" title="{{ item.title | escape }}" class="cart_page_image">
                 <img  src="{{ item | img_url: '100x' }}"
                       alt="{{ item.title | escape }}"
@@ -51,7 +51,7 @@
               </a>
             </div>
 
-            <div class="seven columns omega cart_content_info">
+            <div class="eleven columns omega cart_content_info">
               <h3>
                 <a href="{{ item.url }}">{{ item.product.title }}</a>
               </h3>
@@ -104,7 +104,7 @@
         {% endfor %}
       </div>
 
-      <div class="five columns offset-by-one">
+      <div class="five columns medium-down--one-whole">
         <div class="section clearfix">
           <div class="subtotal">
             <p class="cart_subtotal js-cart_subtotal">
@@ -157,7 +157,7 @@
             {% endif %}
 
             <p>
-              <input type="submit" class="action_button add_to_cart" id="checkout" name="checkout" value="{{ 'cart.general.checkout' | t }}" />
+              <button type="submit" class="action_button add_to_cart" id="checkout" name="checkout">{% if settings.show_lock_icon %}<span class="icon-lock"></span>{% endif %}{{ 'cart.general.checkout' | t }}</button>
             </p>
 
             {% if content_for_additional_checkout_buttons %}
@@ -179,6 +179,18 @@
 
   {% include 'cart-shipping-calculator' %}
 {% endif %}
+
+</div>
+
+<div class="cart__blocks">
+  {% for block in section.blocks %}
+    <div {{ block.shopify_attributes }} class="block__{{ block.type }} block__{{ block.id }}">
+      {% if block.type == 'featured_collection' %}
+        {% include 'include-featured-collection', type: 'block' %}
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
 
 {% schema %}
 
@@ -206,6 +218,65 @@
       "type": "richtext",
       "id": "cart_message",
       "label": "Cart message"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Featured collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "You may also be interested in"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "radio",
+          "id": "collection_style",
+          "label": "Collection layout",
+          "default": "grid",
+          "options": [
+            {
+              "value": "slider",
+              "label": "Slider"
+            },
+            {
+              "value": "grid",
+              "label": "Grid"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "collection_description",
+          "label": "Show description",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "products_per",
+          "label": "Products per row",
+          "min": 2,
+          "max": 7,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "label": "Limit products",
+          "min": 2,
+          "max": 50,
+          "step": 1,
+          "default": 6
+        }
+      ]
     }
   ]
 }

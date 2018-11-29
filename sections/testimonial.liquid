@@ -16,45 +16,45 @@
 {% assign size9 = '1900x' %}
 {% assign size10 = '2000x' %}
 
+{% if section.settings.wide_display == false %}
+<div class="container">
+  <div class="sixteen columns">
+{% endif %}
+
 {% if section.blocks.size > 0 %}
   <div  id="testimonial-{{section.id}}"
-        class="testimonial-slideshow js-testimonial {% if section.settings.testimonial_text_animation != '' %}text-animation--true{% endif %} {% if settings.slideshow_button_style != true %}light-button{% endif %}"
+        class="testimonial-slideshow
+        js-testimonial
+        {% if section.settings.testimonial_text_animation != '' %}text-animation--true{% endif %}
+        transparentBackground--{{settings.slideshow_button_style}}
+        full-width--{{ section.settings.wide_display }}"
         data-slider-id="testimonial-{{section.id}}"
         data-slideshow-speed="{{section.settings.testimonial_speed}}"
         data-slideshow-text-animation="{{section.settings.testimonial_text_animation}}"
         >
     {% for block in section.blocks %}
-        <div class="testimonial-block gallery-cell slide-{{ forloop.index }} {% if block.settings.enable_image == false %}set-static use-mobile-color{% endif %}" {{ block.shopify_attributes }} data-block-id="{{block.id}}">
+        <div class="testimonial-block gallery-cell slide-{{ forloop.index }} {% if block.settings.image == nil %}set-static use-mobile-color{% endif %}" {{ block.shopify_attributes }} data-block-id="{{block.id}}">
             {% if block.settings.image != nil %}
 
-                {% if block.settings.enable_image %}
-
-                    <img  src="{{ block.settings.image | img_url: '100x', format: 'pjpg' }}"
-                          alt="{{ block.settings.image.alt | escape }}"
-                          class="testimonial-image lazyload js-image-loaded {{ settings.image_loading_style }}"
-                          sizes="100vw"
-                          data-src="{{ block.settings.image | img_url: default, format: 'pjpg' }}"
-                          srcset="
-                          {{ block.settings.image | img_url: default, format: 'pjpg' }} {{default | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size1, format: 'pjpg' }} {{size1 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size2, format: 'pjpg' }} {{size2 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size3, format: 'pjpg' }} {{size3 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size4, format: 'pjpg' }} {{size4 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size5, format: 'pjpg' }} {{size5 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size6, format: 'pjpg' }} {{size6 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size7, format: 'pjpg' }} {{size7 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size8, format: 'pjpg' }} {{size8 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size9, format: 'pjpg' }} {{size9 | replace: 'x', 'w'}},
-                          {{ block.settings.image | img_url: size10, format: 'pjpg' }} {{size10 | replace: 'x', 'w'}}"
-                           />
-                  {% if block.settings.darken_bg %}<div class="darken-bg"></div>{% endif %}
-                {% endif %}
-
-            {% else %}
-              {% if block.settings.enable_image %}
-                {% capture i %}{% cycle "1", "2" %}{% endcapture %}
-                {{ 'lifestyle-' | append: i | placeholder_svg_tag: 'placeholder-svg placeholder-svg--slideshow testimonial-image' }}
-              {% endif %}
+              <img  src="{{ block.settings.image | img_url: '100x', format: 'pjpg' }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    class="testimonial-image lazyload js-image-loaded {{ settings.image_loading_style }}"
+                    sizes="100vw"
+                    data-src="{{ block.settings.image | img_url: default, format: 'pjpg' }}"
+                    srcset="
+                    {{ block.settings.image | img_url: default, format: 'pjpg' }} {{default | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size1, format: 'pjpg' }} {{size1 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size2, format: 'pjpg' }} {{size2 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size3, format: 'pjpg' }} {{size3 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size4, format: 'pjpg' }} {{size4 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size5, format: 'pjpg' }} {{size5 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size6, format: 'pjpg' }} {{size6 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size7, format: 'pjpg' }} {{size7 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size8, format: 'pjpg' }} {{size8 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size9, format: 'pjpg' }} {{size9 | replace: 'x', 'w'}},
+                    {{ block.settings.image | img_url: size10, format: 'pjpg' }} {{size10 | replace: 'x', 'w'}}"
+                      />
+              {% if block.settings.darken_bg %}<div class="darken-bg"></div>{% endif %}
             {% endif %}
             <div class="caption position-{{block.settings.text_position}} js-caption {% unless block.settings.enable_image == false %}no-white-bg{% endunless %}">
                 <div class="caption-content testimonial-text align-{{block.settings.text_align}}">
@@ -64,12 +64,11 @@
                     </p>
                     <div class="feature_divider"></div>
                   {% endif %}
-          <div class="subtitle">
+                  <div class="subtitle">
                     {{ block.settings.testimonial }}
-
                     <p>
                       {% if block.settings.name != blank %}
-                       {{ block.settings.name }}<br>
+                        {{ block.settings.name }}<br>
                       {% endif %}
 
                       {% if block.settings.store_name != blank %}
@@ -87,12 +86,23 @@
   </div>
 {% endif %}
 
+{% if section.settings.wide_display == false %}
+  </div>
+</div>
+{% endif %}
+
 {% schema %}
 
 {
   "name": "Testimonials",
   "class": "testimonial-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
+    },
     {
       "type": "select",
       "id": "testimonial_text_animation",
@@ -121,11 +131,11 @@
       "type": "range",
       "id": "testimonial_speed",
       "label": "Change testimonials every",
-      "min": 4,
+      "min": 0,
       "max": 12,
       "step": 1,
       "default": 6,
-      "unit": "sec"        
+      "unit": "sec"
     }
   ],
   "blocks": [
@@ -138,12 +148,6 @@
           "id": "image",
           "label": "Image",
           "info": "1600 x 1000px recommended"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_image",
-          "label": "Use image",
-          "default": true
         },
         {
           "type": "checkbox",

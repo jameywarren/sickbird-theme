@@ -1,5 +1,6 @@
 {% if type == 'block' %}
   {% assign id = block.id %}
+  {% assign wide_display = block.settings.wide_display %}
   {% assign source = block.settings.source %}
   {% assign aspect_ratio = block.settings.aspect_ratio %}
   {% assign autoplay = block.settings.autoplay %}
@@ -25,6 +26,7 @@
   {% assign button2_highlight = block.settings.button2_highlight %}
 {% else %}
   {% assign id = section.id %}
+  {% assign wide_display = section.settings.wide_display %}
   {% assign source = section.settings.source %}
   {% assign aspect_ratio = section.settings.aspect_ratio %}
   {% assign autoplay = section.settings.autoplay %}
@@ -50,6 +52,11 @@
   {% assign button2_highlight = section.settings.button2_highlight %}
 {% endif %}
 
+{% if wide_display == false %}
+<div class="container">
+  <div class="sixteen columns">
+{% endif %}
+
 {% assign default = '1400x' %}
 {% assign size1 = '480x' %}
 {% assign size2 = '765x' %}
@@ -62,7 +69,15 @@
 {% assign size9 = '1900x' %}
 {% assign size10 = '2000x' %}
 
-<section  class="homepage-video darken-video-{{ video_dark_overlay }}  placeholder-image--{% if image %}true{% else %}false{% endif %}"
+{% if type == 'block' %}
+  <div class="video-section">
+{% endif %}
+
+<section class="homepage-video
+                darken-video-{{ video_dark_overlay }}
+                placeholder-image--{% if image %}true{% else %}false{% endif %}
+                full-width--{{ wide_display }}
+                auto-play--{{ autoplay }}"
       data-video-id="video-{{id}}"
       data-autoplay="{{ autoplay }}"
       data-autoloop="{{ autoloop }}"
@@ -137,6 +152,10 @@
   </div>
 </section>
 
+{% if type == 'block' %}
+  </div>
+{% endif %}
+
 {% unless pretext == blank and title == blank and subtitle == blank and button1_label == blank and button2_label == blank %}
   <section class="position-{{ text_position }} caption js-caption text-on-video outside-homepage-video">
     <div class="caption-content align-{{ text_align }}">
@@ -176,3 +195,8 @@
     }
   {% endif %}
 </style>
+
+{% if wide_display == false %}
+  </div>
+</div>
+{% endif %}

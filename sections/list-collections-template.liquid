@@ -86,25 +86,12 @@
 
         <div class="product-wrap">
             {% if collection.image %}
-              {% if settings.align_height %}
-                {% assign collection_height = settings.collection_height | plus: 0 %}
-                {% assign product_aspect_ratio = collection.image.aspect_ratio | plus: 0 %}
-                {% assign product_set_width = product_aspect_ratio | times: collection_height %}
 
-                {% if collection.image.width >= collection.image.height %}
-                  {% assign align_height_value = 'width: 100%; height: auto;' %}
-                {% else %}
-                  {% assign align_height_value = 'width: 100%;' %}
-                {% endif %}
-
-              {% endif %}
-
-              <div class="image__container" style="{% if settings.align_height %} max-width: {{ product_set_width }}px; {% else %} max-width: {{- collection.image.width -}}px; {% endif %}">
+              <div class="image__container">
 
                 <img  src="{{ collection.image.src | collection_img_url: '100x' }}"
                       class="lazyload {{ settings.image_loading_style }}"
                       alt="{{ collection.title | escape }}"
-                      style="{{ align_height_value }} max-width: {{- collection.image.width -}}px;"
                       data-sizes="auto"
                       data-src="{{ collection.image.src | collection_img_url: '1160x' }}"
                       data-srcset=" {{ collection.image.src | collection_img_url: '1160x'}} 1160w,
@@ -115,24 +102,11 @@
                       />
               </div>
             {% else %}
-              {% if settings.align_height %}
-                {% assign collection_height = settings.collection_height | plus: 0 %}
-                {% assign product_aspect_ratio = collection.products.first.featured_image.aspect_ratio | plus: 0 %}
-                {% assign product_set_width = product_aspect_ratio | times: collection_height %}
 
-                {% if collection.products.first.featured_image.width >= collection.products.first.featured_image.height %}
-                  {% assign align_height_value = 'width: 100%; height: auto;' %}
-                {% else %}
-                  {% assign align_height_value = 'width: 100%;' %}
-                {% endif %}
-
-              {% endif %}
-
-              <div class="image__container" style="{% if settings.align_height %} max-width: {{ product_set_width }}px; {% else %} max-width: {{- collection.products.first.featured_image.width -}}px; {% endif %}">
+              <div class="image__container">
                 <img  src="{{ collection.products.first.featured_image | product_img_url: '100x' }}"
                       class="lazyload {{ settings.image_loading_style }}"
                       alt="{{ collection.title | escape }}"
-                      style="{{ align_height_value }} max-width: {{- collection.products.first.featured_image.width -}}px;"
                       data-sizes="auto"
                       data-src="{{ collection.products.first.featured_image | product_img_url: '1160x' }}"
                       data-srcset=" {{ collection.products.first.featured_image | product_img_url: '1160x'}} 1160w,
@@ -190,7 +164,7 @@
       "max": 4,
       "step": 1,
       "default": 3
-    },  
+    },
     {
       "type": "range",
       "id": "pagination_limit",

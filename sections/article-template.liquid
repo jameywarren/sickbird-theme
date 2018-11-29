@@ -34,14 +34,14 @@
     {% assign sidebar = false %}
   {% endif %}
 
-  <div class="twelve columns {% if sidebar == false %}offset-by-two{% endif %}">
+  <div class="twelve columns {% if sidebar == false %}offset-by-two{% endif %} medium-down--one-whole equal-columns--outside-trim">
     <div class="section clearfix">
       <div class="clearfix breadcrumb">
         {% if section.settings.blog_breadcrumb %}
           <div class="breadcrumb_text left" itemscope itemtype="http://schema.org/BreadcrumbList">
-            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a><meta itemprop="position" content="1" /></span>
             &nbsp;<span class="icon-slash">/</span>
-            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ blog.url }}" title="{{ blog.title | escape }}" itemprop="item"><span itemprop="name">{{ blog.title }}</span></a></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ blog.url }}" title="{{ blog.title | escape }}" itemprop="item"><span itemprop="name">{{ blog.title }}</span></a><meta itemprop="position" content="2" /></span>
           </div>
         {% endif %}
         {% if section.settings.blog_pagination %}
@@ -73,6 +73,10 @@
 
           {% if section.settings.blog_date %}
             <span>{{ article.published_at | date: format: "month_day_year" }}</span>
+          {% endif %}
+
+          {% if section.settings.read_time %}
+            {% include 'include-read-time' %}
           {% endif %}
 
           {% if section.settings.blog_tags %}
@@ -214,12 +218,12 @@
               <p class="quote align_left">{{ 'general.forms.post_error' | t }}</p>
             {% endif %}
 
-            <div class="six columns alpha">
+            <div class="eight columns alpha">
               <label for="comment_author">{{ 'blogs.comments.name' | t }} <span class="red">*</span></label>
               <input type="text" id="comment_author" name="comment[author]" value="{{ form.author }}" required="required" />
             </div>
 
-            <div class="six columns omega">
+            <div class="eight columns omega">
               <label for="comment_email">{{ 'blogs.comments.email' | t }} <span class="red">*</span></label>
               <input type="text" id="comment_email" name="comment[email]" value="{{ form.email }}" required="required" />
             </div>
@@ -248,14 +252,14 @@
             {% assign skip_article = true %}
           {% endif %}
           {% unless skip_article %}
-            <div class="four columns {% cycle 'alpha', ' ', 'omega' %} article">
+            <div class="one-third columns article">
               {% if a.image %}
                 <a href="{{ a.url }}" title="{{ a.title | escape }}">
                   <img  src="{{ a.image | img_url: '100x' }}"
                         alt="{% if a.image.alt != blank %}{{ a.image.alt }}{% else %}{{ a.title | escape }}{% endif %}"
                         data-src="{{ a.image | img_url: '1200x', format: 'pjpg' }}"
                         class="lazyload {{ settings.image_loading_style }}"
-                        sizes="auto"
+                        sizes="100vw"
                         srcset="{{ a.image | img_url: '480x', format: 'pjpg' }} 480w,
                                 {{ a.image | img_url: '600x', format: 'pjpg' }} 600w,
                                 {{ a.image | img_url: '800x', format: 'pjpg' }} 800w,
@@ -278,11 +282,15 @@
                   <span>{{ a.published_at | date: format: "month_day_year" }}</span>
                 {% endif %}
 
+                {% if section.settings.read_time %}
+                  {% include 'include-read-time', article: a %}
+                {% endif %}
+
                 {% if settings.disqus_enabled %}
                   <span>
                     <a href="{{ a.url }}#disqus_thread" data-disqus-identifier="{{ a.id }}" class="disqus-comment-count">{{ 'blogs.counts.comments_with_count' | t: count: 0 }}</a>
                   </span>
-                {% elsif a.comments_enabled? and a.comments_count > 0 %}
+                {% elsif section.settings.blog_comment_count and a.comments_count > 0 %}
                   <span>
                     <a href="{{ a.url }}#comments">{{ 'blogs.counts.comments_with_count' | t: count: a.comments_count }}</a>
                   </span>
@@ -297,7 +305,7 @@
               {% endif %}
 
               {% if a.excerpt != blank %}
-                <div class="excerpt">{{ a.excerpt | truncate: 500 }}</div>
+                <div class="excerpt">{{ a.excerpt }}</div>
               {% endif %}
               {% if section.settings.read_more_link %}
                 <a href="{{ a.url }}" title="{{ a.title | escape }}" {% if settings.read_more_style == 'button' %}class="action_button continue-button"{% endif %}>{{ 'blogs.general.continue_reading_html' | t }}</a>
@@ -355,6 +363,12 @@
      "label": "Show author"
     },
     {
+      "type": "checkbox",
+      "id": "read_time",
+      "label": "Show estimated read time",
+      "default": true
+    },
+    {
      "type": "checkbox",
      "id": "blog_date",
      "label": "Show date",
@@ -373,16 +387,20 @@
      "default": true
     },
     {
-     "type": "checkbox",
-     "id": "read_more_link",
-     "label": "Show continue reading link for related blog post",
-     "default": true
+      "type": "header",
+      "content": "Related blog posts"
     },
     {
      "type": "checkbox",
      "id": "blog_additional_posts",
      "label": "Show related blog posts",
      "default": false
+    },
+    {
+     "type": "checkbox",
+     "id": "read_more_link",
+     "label": "Show continue reading link",
+     "default": true
     },
     {
      "type": "header",

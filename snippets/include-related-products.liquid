@@ -1,3 +1,13 @@
+{% if template contains 'details' %}
+  {% assign related_products_style = block.settings.related_products_style %}
+  {% assign related_products_limit = block.settings.related_products_limit %}
+  {% assign products_per_row = block.settings.products_per %}
+{% else %}
+  {% assign related_products_style = section.settings.related_products_style %}
+  {% assign related_products_limit = section.settings.related_products_limit %}
+  {% assign products_per_row = section.settings.products_per %}
+{% endif %}
+
 {% if collection and collection.all_products_count > 1 %}
   {% assign col = collection.handle %}
 {% else %}
@@ -19,15 +29,15 @@
     {% assign skip_product = product %}
     {% assign products = collections[col].products %}
     {% unless sidebar %} <div class="container"> {% endunless %}
-      <div class="related-products__title {% unless section.settings.related_products_style == 'slider' %}{% if sidebar %}twelve columns{% else %}sixteen columns{% endif %}{% endunless %}">
+      <div class="related-products__title {% unless section.settings.related_products_style == 'slider' %}sixteen columns{% endunless %}">
         <h4 class="title center">{{ 'products.product.related_items' | t }}</h4>
         <div class="feature_divider"></div>
       </div>
       <div class="clear"></div>
     {% unless sidebar %} </div> {% endunless %}
 
-    {% if section.settings.related_products_style == 'slider' %}
-      {% assign limit = section.settings.related_products_limit %}
+    {% if related_products_style == 'slider' %}
+      {% assign limit = related_products_limit %}
       <div class="related-products related-products--slider js-related-products-slider">
         {% if col and collections[col].all_products_count > 0 %}
           {% include 'product-slider', related_products: true %}
@@ -35,11 +45,11 @@
       </div>
 
     {% else %}
-      {% assign limit = section.settings.related_products_limit | plus: 1 %}
-      {% assign products_per_row = section.settings.products_per %}
+      {% assign limit = related_products_limit %}
+      {% assign products_per_row = products_per_row %}
       {% if col and collections[col].all_products_count > 0 %}
         {% unless sidebar %}<div class="container related-products--grid">{% endunless %}
-          <div class="{% if sidebar %}twelve{% else %}sixteen{% endif %} columns">
+          <div class="sixteen columns equal-columns--outside-trim">
             {% include 'product-loop', related_products: true %}
           </div>
         {% unless sidebar %}</div>{% endunless %}

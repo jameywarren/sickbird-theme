@@ -7,47 +7,88 @@
   "class": "map-section",
   "settings": [
     {
-      "type": "text",
-      "id": "contact_address",
-      "label": "Street address",
-      "info": "The full address that will be placed on the map."
-    },
-    {
-      "type": "range",
-      "id": "zoom_level",
-      "label": "Map zoom level",
-      "min": 1,
-      "max": 20,
-      "step": 1,
-      "default": 12
-    },
-    {
-      "type": "range",
-      "id": "map_height",
-      "min": 250,
-      "max": 500,
-      "step": 50,
-      "unit": "px",
-      "label": "Height",
-      "default": 400
-    },
-    {
       "type": "checkbox",
-      "id": "map_stretch",
+      "id": "wide_display",
       "label": "Wide display",
       "default": true
     },
     {
-      "type": "checkbox",
-      "id": "map_greyscale",
-      "label": "Enable greyscale map",
-      "default": false
+      "type": "text",
+      "id": "map_address",
+      "label": "Address",
+      "info": "Google Maps will find the exact location"
+    },
+    {
+      "type": "range",
+      "id": "map_height",
+      "min": 300,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Map height",
+      "default": 400
+    },
+    {
+      "type": "range",
+      "id": "zoom_level",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "x",
+      "label": "Map zoom level",
+      "default": 16
+    },
+    {
+      "type": "image_picker",
+      "id": "map_image",
+      "label": "Image",
+      "info": "Displayed when map isn't loaded"
+    },
+    {
+      "type": "header",
+      "content": "API key"
+    },
+    {
+      "type": "text",
+      "id": "api_key",
+      "label": "Google Maps API key",
+      "info": "You’ll need to [register a Google Maps API Key](https://help.shopify.com/manual/using-themes/troubleshooting/map-section-api-key) to display the map"
     },
     {
       "type": "checkbox",
-      "id": "map_scrolling",
-      "label": "Enable scrolling",
-      "default": false
+      "id": "show_pin",
+      "label": "Show pin",
+      "info": "Requires use of API key",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "map_style",
+      "label": "Map color scheme",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "aubergine",
+          "label": "Aubergine"
+        },
+        {
+          "value": "night",
+          "label": "Night"
+        },
+        {
+          "value": "retro",
+          "label": "Retro"
+        },
+        {
+          "value": "silver",
+          "label": "Silver"
+        }
+      ],
+      "default": "default",
+      "info": "Requires use of API key"
     }
   ],
   "presets": [

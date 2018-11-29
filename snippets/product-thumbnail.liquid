@@ -1,22 +1,25 @@
-{% if sidebar %}
-  <div class="{% if products_per_row == 2 %}six columns {% cycle collection_group_thumb: 'alpha', 'omega' %}{% elsif products_per_row == 3 %}four columns {% cycle collection_group_thumb: 'alpha', '', 'omega' %}{% elsif products_per_row == 4 %}three columns {% cycle collection_group_thumb: 'alpha', '', '', 'omega' %}{% else %}one-fifth-sidebar column {% cycle collection_group_thumb: 'alpha', '', '', '', 'omega' %}{% endif %} thumbnail {% cycle collection_group_mobile: 'even', 'odd' %}">
-{% else %}
-  <div class="
-    {% if products_per_row == 2 %}
-      eight columns {% cycle collection_group_thumb: 'alpha', 'omega' %}
-    {% elsif products_per_row == 3 %}
-      one-third column {% cycle collection_group_thumb: 'alpha', '', 'omega' %}
-    {% elsif products_per_row == 4 %}
-      four columns {% cycle collection_group_thumb: 'alpha', '', '', 'omega' %}
-    {% elsif products_per_row == 5 %}
-      one-fifth column {% cycle collection_group_thumb: 'alpha', '', '', '', 'omega' %}
-    {% elsif products_per_row == 6 %}
-      one-sixth column {% cycle collection_group_thumb: 'alpha', '', '', '', '', 'omega' %}
-    {% else %}
-      one-seventh column {% cycle collection_group_thumb: 'alpha', '', '', '', '', '', 'omega' %}
-    {% endif %} thumbnail {% cycle collection_group_mobile: 'even', 'odd' %}">
-{% endif %}
-  
+<div class="
+  {% if products_per_row == 2 %}
+    eight columns
+  {% elsif products_per_row == 3 %}
+    one-third column
+  {% elsif products_per_row == 4 %}
+    four columns
+  {% elsif products_per_row == 5 %}
+    one-fifth column
+  {% elsif products_per_row == 6 %}
+    one-sixth column
+  {% else %}
+    one-seventh column
+  {% endif %}
+  {% if settings.mobile_products_per_row == '1' %}
+    medium-down--one-half
+    small-down--one-whole
+  {% else %}
+    medium-down--one-half
+    small-down--one-half
+  {% endif %}
+  thumbnail {% cycle collection_group_mobile: 'even', 'odd' %}">
 
   {% assign collection_handles = product.collections | map: 'handle' %}
   {% if product.featured_image.alt contains 'youtube' or image.alt contains 'vimeo' %}
@@ -25,31 +28,13 @@
     {% assign alt_text = product.featured_image.alt %}
   {% endif %}
 
-  {% if settings.align_height %}
-    {% assign collection_height = settings.collection_height | plus: 0 %}
-    {% assign product_aspect_ratio = product.featured_image.aspect_ratio | plus: 0 %}
-    {% assign product_set_width = product_aspect_ratio | times: collection_height %}
-
-    {% if product.featured_image.width >= product.featured_image.height %}
-      {% assign align_height_value = 'width: 100%; height: auto;' %}
-    {% else %}
-      {% assign align_height_value = 'width: 100%;' %}
-    {% endif %}
-
-  {% endif %}
-
   <div class="product-wrap">
-    {% capture the_snippet_fave_icon %}{% include 'ssw-widget-faveicon' with product.id %}{% endcapture %}
-{% unless the_snippet_fave_icon contains 'Liquid error' %}
-    {{ the_snippet_fave_icon }}
-{% endunless %}
     <div class="relative product_image swap-{{ settings.collection_secondary_image }}">
       <a href="{{ product.url | within: collection }}" itemprop="url">
-        <div class="image__container" style="{% if settings.align_height %} max-width: {{ product_set_width }}px; {% else %} max-width: {{- product.featured_image.width -}}px; {% endif %}">
+        <div class="image__container">
           <img  src="{{ product.featured_image | product_img_url: '100x' }}"
                 alt="{{ alt_text | escape }}"
                 class="lazyload {{ settings.image_loading_style }}"
-                style="{{ align_height_value }} max-width: {{- product.featured_image.width -}}px;"
                 data-sizes="auto"
                 data-src="{{ product.featured_image | product_img_url: '900x' }}"
                 data-srcset=" {{ product.featured_image | product_img_url: '300x' }} 300w,
@@ -76,5 +61,5 @@
       {% include "product-info" %}
     </a>
   </div>
-{% include 'collection-swatch' %}
+  {% include 'collection-swatch' %}
 </div>

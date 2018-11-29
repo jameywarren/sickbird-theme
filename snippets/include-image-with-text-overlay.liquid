@@ -1,5 +1,6 @@
 {% if type == 'block' %}
   {% assign id = block.id %}
+  {% assign wide_display = block.settings.wide_display %}
   {% assign image = block.settings.image %}
   {% assign pretext = block.settings.pretext %}
   {% assign title = block.settings.title %}
@@ -16,6 +17,7 @@
   {% assign button2_highlight = block.settings.button2_highlight %}
 {% else %}
   {% assign id = section.id %}
+  {% assign wide_display = section.settings.wide_display %}
   {% assign image = section.settings.image %}
   {% assign pretext = section.settings.pretext %}
   {% assign title = section.settings.title %}
@@ -32,6 +34,11 @@
   {% assign button2_highlight = section.settings.button2_highlight %}
 {% endif %}
 
+{% if wide_display == false %}
+<div class="container">
+  <div class="sixteen columns">
+{% endif %}
+
 {% assign default = '1400x' %}
 {% assign size1 = '480x' %}
 {% assign size2 = '765x' %}
@@ -44,7 +51,7 @@
 {% assign size9 = '1900x' %}
 {% assign size10 = '2000x' %}
 
-<section id="banner-{{id}}" class="banner">
+<section id="banner-{{ id }}" class="banner full-width--{{ wide_display }}">
   {% if image != nil %}
     <img  src="{{ image | img_url: '100x', format: 'pjpg' }}"
           alt="{{ image.alt | escape }}"
@@ -112,3 +119,8 @@
     </div>
   {% endunless %}
 </section>
+
+{% if wide_display == false %}
+  </div>
+</div>
+{% endif %}

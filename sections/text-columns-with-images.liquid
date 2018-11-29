@@ -12,22 +12,22 @@
     {% elsif section.blocks.size == 3 %}
       {%- assign column_width = 'one-third column' -%}
     {% elsif section.blocks.size == 4 %}
-      {%- assign column_width = 'four columns' -%}
+      {%- assign column_width = 'four columns medium-down--one-half' -%}
     {% elsif section.blocks.size == 5 %}
-      {%- assign column_width = 'one-fifth column' -%}
+      {%- assign column_width = 'one-fifth column medium-down--one-half' -%}
     {% else %}
-      {%- assign column_width = 'eight columns' -%}
+      {%- assign column_width = 'eight columns medium-down--one-half' -%}
     {% endif %}
     <div class="{{ column_width }} text-column" {{ block.shopify_attributes }}>
       <div class="border-style--{{ block.settings.border_style }} text-align--{{ block.settings.align_text }}">
         {% if block.settings.enable_image %}
           {% if block.settings.image != blank %}
             <p>
-              <img  src="{{ block.settings.image.src | img_url: '300x' }}"
+              <img  src="{{ block.settings.image.src | img_url: '100x' }}"
                     class="lazyload {{ settings.image_loading_style }}"
                     alt="{{ block.settings.image.alt }}"
                     data-sizes="auto"
-                    data-src="{{ block.settings.image | img_url }}"
+                    data-src="{{ block.settings.image | img_url: '800x' }}"
                     data-srcset=" {{ block.settings.image | img_url: '2048x' }} 2048w,
                                   {{ block.settings.image | img_url: '1200x' }} 1200w,
                                   {{ block.settings.image | img_url: '1000x' }} 1000w,

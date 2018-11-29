@@ -7,7 +7,7 @@
 <footer class="footer">
   <div class="container footer-menu-wrap">
       {% for block in section.blocks %}
-        <div class="{% if forloop.length >= 5 %}three columns{% elsif forloop.length == 4 %}four columns{% elsif forloop.length == 3 %}one-third column{% elsif forloop.length == 2 %}eight columns{% endif %}" {{ block.shopify_attributes }}>
+        <div class="{% if forloop.length >= 5 %}three columns{% elsif forloop.length == 4 %}four columns{% elsif forloop.length == 3 %}one-third column{% elsif forloop.length == 2 %}eight columns{% endif %} medium-down--one-whole" {{ block.shopify_attributes }}>
           {% if block.type == 'logo' %}
             <div class="text-align--{{block.settings.text_align}}">
               {% if block.settings.image %}
@@ -104,9 +104,11 @@
             </div>
 
           {% elsif block.type == 'text' %}
-            <div class="footer_content footer-text">
+            <div class="footer_content footer-text {% if block.settings.title == blank %}no-footer-title{% endif %}">
               {% if block.settings.title != blank %}
                 <h6>{{ block.settings.title }}<span class="right icon-down-arrow"></span></h6>
+              {% endif %}
+              {% if block.settings.content %}
                 <div class="toggle_content">
                   {{ block.settings.content }}
                 </div>
@@ -159,13 +161,13 @@
           {% if section.settings.display_designed_by %}
             {{ 'layout.general.designer_credits_html' | t }}
           {% endif %}
-          {{ powered_by_link | split: '" ' | join: '?ref=shopdistillery" ' | split: '">' | join: '?ref=shopdistillery">' }}
+          {{ powered_by_link | split: '" ' | join: '?ref=out-of-the-sandbox" ' | split: '">' | join: '?ref=out-of-the-sandbox">' }}
         </p>
 
         {% if section.settings.display_payment_methods %}
           <div class="payment_methods">
             {% for type in shop.enabled_payment_types %}
-              <img src="{{ type | payment_type_img_url }}" alt="{{ type | replace: "_", " " | capitalize }}" />
+              {{ type | payment_type_svg_tag: class:'payment-icon' }}
             {% endfor %}
           </div>
         {% endif %}
@@ -277,7 +279,7 @@
           "type": "link_list",
           "id": "menu",
           "label": "Menu",
-          "info": "This menu won't show dropdown items"
+          "info": "This menu won't show drop-down items"
         },
         {
           "type": "checkbox",

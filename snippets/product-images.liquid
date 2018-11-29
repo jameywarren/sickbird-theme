@@ -10,12 +10,12 @@
 <div class="gallery-wrap js-product-page-gallery clearfix
             gallery-arrows--{{section.settings.gallery_arrows}}
             {% if section.settings.product_thumbs %} {{ section.settings.thumbnail_position }} {% endif %}
-            slideshow_animation--{{ section.settings.slideshow_animation }}
             ">
   <div class="product_gallery product-{{ product.id }}-gallery
               {% if product.images.size > 1 %} multi-image {% endif %}
               {% if product.images.size <= 1 %} single-image {% endif %}
-              {% if settings.slideshow_button_style != true %}light-button{% endif %}
+              transparentBackground--{{settings.slideshow_button_style}}
+              slideshow_animation--{{ section.settings.slideshow_animation }}
               "
       data-zoom="{{ section.settings.activate_zoom }}"
       data-autoplay="{{ section.settings.activate_autoplay }}">
@@ -69,7 +69,7 @@
                       class=" lazyload {{ settings.image_loading_style }}"
                       data-index="{{ forloop.index0 }}"
                       data-image-id="{{ image_id }}"
-                      data-sizes="auto"
+                      data-sizes="{% if section.settings.enable_product_lightbox %}100vw{% else %}auto{% endif %}"
                       data-src="{{ image_2000x }}"
                       srcset=" {{ image_200x }} 200w,
                                     {{ image_400x }} 400w,
@@ -89,7 +89,7 @@
   </div>
   {% if section.settings.product_thumbs %}
     {% if product.images.size > 1 and image_width != 'full' %}
-      <div class="product_gallery_nav product-{{ product.id }}-gallery-nav">
+      <div class="product_gallery_nav product_gallery_nav--{{ section.settings.thumbnail_position }} product-{{ product.id }}-gallery-nav">
 
           {% for image_item in image_list %}
             {% assign image = image_item | split: "`~`" %}

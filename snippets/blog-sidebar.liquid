@@ -1,5 +1,5 @@
 {% if section.blocks.size > 0 %}
-  <div class="sidebar four columns">
+  <div class="sidebar four columns medium-down--one-whole">
     <div class="sidebar_content toggle-all--{{ section.settings.toggle }}">
       {% for block in section.blocks %}
         <div class="sidebar-block" {{ block.shopify_attributes }}>
@@ -27,7 +27,15 @@
                   {% endif %}
 
                   <li>
-                    <a {% if link.active %}class="active"{% endif %} href="{{ link.url }}">{{ link.title }}</a>
+                    {% if link.url == 'http://' or link.url == '' or link.url == '/' or link.url == 'https://' or link.url == '#' %}
+                     <a data-no-instant href="{{ link.url }}" class="{% if link.active %}active{% endif %} parent-link--false">
+                        {{ link.title }}
+                      </a>
+                    {% else %}
+                     <a data-no-instant href="{{ link.url }}" class="{% if link.active %}active{% endif %} parent-link--true">
+                       {{ link.title }}
+                     </a>
+                    {% endif %}
 
                     {% if linklists[link.handle].links != blank %}
                       <span class="menu-toggle icon-down-arrow {% if active_link %}active{% endif %}" aria-haspopup="true" aria-expanded="{% if active_link %}true{% else %}false{% endif %}"> </span>

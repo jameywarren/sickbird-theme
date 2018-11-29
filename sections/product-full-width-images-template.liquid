@@ -6,7 +6,7 @@
 
 <a name="pagecontent" id="pagecontent"></a>
 
-<div class="container main content">
+<div class="container main content product-name--{{ product.handle }}">
   <div class="sixteen columns">
     {% if collection.previous_product or collection.next_product or section.settings.product_breadcrumb %}
       <div class="clearfix breadcrumb-collection">
@@ -25,17 +25,33 @@
 
         {% if section.settings.product_breadcrumb %}
           <div class="breadcrumb_text" itemscope itemtype="http://schema.org/BreadcrumbList">
-            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item" class="breadcrumb_link"><span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span></a></span>
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ shop.url }}" title="{{ shop.name | escape }}" itemprop="item" class="breadcrumb_link">
+                <span itemprop="name">{{ 'general.breadcrumbs.home' | t }}</span>
+              </a>
+              <meta itemprop="position" content="1" />
+            </span>
             <span class="breadcrumb-divider">/</span>
             <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
               {% if collection %}
-                <a href="{{ collection.url }}" title="{{ collection.title | escape }}" itemprop="item" class="breadcrumb_link"><span itemprop="name">{{ collection.title }}</span></a>
+                <a href="{{ collection.url }}" title="{{ collection.title | escape }}" itemprop="item" class="breadcrumb_link">
+                  <span itemprop="name">{{ collection.title }}</span>
+                  <meta itemprop="position" content="2" />
+                  </a>
               {% else %}
-                <a href="/collections/all" title="{{ collections.all.title }}" class="breadcrumb_link"><span>{{ collections.all.title }}</span></a>
+                <a href="/collections/all" title="{{ collections.all.title }}" itemprop="item" class="breadcrumb_link">
+                  <span itemprop="name">{{ collections.all.title }}</span>
+                  <meta itemprop="position" content="2" />
+                  </a>
               {% endif %}
             </span>
             <span class="breadcrumb-divider">/</span>
-            {{ product.title }}
+            <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+              <a href="{{ product.url }}" itemprop="item" class="breadcrumb_link">
+                <span itemprop="name">{{ product.title }}</span>
+                <meta itemprop="position" content="3" />
+              </a>
+            </span>
           </div>
         {% endif %}
       </div>
@@ -61,7 +77,7 @@
           data-free-text="{{ settings.free_price_text }}">
       <div class="section product_section clearfix js-product_section {% if section.settings.product_images_position == 'right' %}align_right--images{% endif %}" itemscope itemtype="http://schema.org/Product" data-rv-handle="{{ product.handle }}">
 
-        <div class="{% if sidebar %}seven{% else %}nine{% endif %} columns {% if section.settings.product_images_position == 'left' %}alpha{% else %}omega{% endif %}">
+        <div class="nine columns {% if section.settings.product_images_position == 'left' %}alpha{% else %}omega{% endif %}">
           {% include 'product-images' %}
         </div>
 
@@ -94,7 +110,7 @@
             </p>
           {% endif %}
           <h1 class="product_name" itemprop="name">{{ product.title }}</h1>
-          {% if settings.enable_shopify_product_badges and settings.enable_shopify_review_comments %}
+          {% if section.settings.enable_shopify_product_badges and settings.enable_shopify_review_comments %}
             <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
           {% endif %}
           <div class="feature_divider"></div>
@@ -119,7 +135,7 @@
               <meta itemprop="priceCurrency" content="{{ shop.currency }}" />
               <meta itemprop="seller" content="{{ shop.name | escape }}" />
               <link itemprop="availability" href="http://schema.org/{% if variant.available %}InStock{% else %}OutOfStock{% endif %}">
-              <meta itemprop="itemCondition" content="New" />
+              <meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
 
               <span class="sold_out">{% if variant.available == false %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
               <span itemprop="price" content="{{ variant.price | money_without_currency | remove: "," }}" class="{% if variant.compare_at_price > variant.price %}sale{% endif %}">
@@ -169,8 +185,10 @@
             {% endif %}
           {% endif %}
 
-          {% if settings.enable_shopify_review_comments and settings.review_position == "next_to_gallery" %}
-            <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+          {% if section.settings.review_position == "next_to_gallery" %}
+            <div class="shopify-reviews reviewsVisibility--{{settings.enable_shopify_review_comments}}">
+              <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+            </div>
           {% endif %}
 
           {% if section.settings.display_collections or section.settings.display_tags or section.settings.display_type %}
@@ -228,8 +246,8 @@
         </div>
       {% endif %}
 
-      {% if settings.enable_shopify_review_comments and settings.review_position == "below_gallery" %}
-        <div class="shopify-reviews">
+      {% if section.settings.review_position == "below_gallery" %}
+        <div class="shopify-reviews reviewsVisibility--{{settings.enable_shopify_review_comments}}">
           <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
         </div>
       {% endif %}
@@ -238,7 +256,7 @@
   {% if sidebar %}
 
           {% if section.settings.display_related_products %}
-            {% include 'related-products' %}
+            {% include 'include-related-products' %}
           {% endif %}
           {% if section.settings.display_recently_viewed %}
             {% include 'recently-viewed' %}
@@ -257,7 +275,7 @@
     <div class="js-full-width-product-images full-width-product-images"></div>
 
     {% if section.settings.display_related_products %}
-      {% include 'related-products' %}
+      {% include 'include-related-products' %}
     {% endif %}
     {% if section.settings.display_recently_viewed %}
       {% include 'recently-viewed' %}
@@ -338,15 +356,19 @@
       "type": "select",
       "id": "thumbnail_position",
       "label": "Thumbnail position",
-      "default": "bottom-thumbnails",
+      "default": "bottom-slider",
       "options": [
+        {
+          "value": "bottom-thumbnails",
+          "label": "Bottom (grid)"
+        },
+        {
+          "value": "bottom-slider",
+          "label": "Bottom (slider)"
+        },
         {
           "value": "left-thumbnails",
           "label": "Left"
-        },
-        {
-          "value": "bottom-thumbnails",
-          "label": "Bottom"
         },
         {
           "value": "right-thumbnails",
@@ -419,6 +441,36 @@
         {
           "value": "bottom",
           "label": "Below product form"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Product reviews"
+    },
+    {
+      "type": "paragraph",
+      "content": "Reviews app must be enabled [(?)](https://help.outofthesandbox.com/hc/en-us/articles/360008549274#section2)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_shopify_product_badges",
+      "label": "Display star rating on product",
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "review_position",
+      "label": "Reviews position",
+      "default": "next_to_gallery",
+      "options": [
+        {
+          "value": "next_to_gallery",
+          "label": "In product description area"
+        },
+        {
+          "value": "below_gallery",
+          "label": "Below image\/description"
         }
       ]
     },

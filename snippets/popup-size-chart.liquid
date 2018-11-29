@@ -1,6 +1,7 @@
-<div class="remodal" data-remodal-id="size-chart{{product_id}}" data-remodal-options="hashTracking: false">
+<div class="remodal size-chart-remodal" data-remodal-id="size-chart{{product_id}}" data-remodal-options="hashTracking: false">
 <a data-remodal-action="close" class="remodal-close"></a>
 
+  <div class="size-chart-wrap">
   {% assign product_tags = product.tags | join: ' ' %}
   {% if product_tags contains 'meta-size-chart-' %}
     {% for tag in product.tags %}
@@ -16,5 +17,6 @@
     <div class="feature_divider"></div>
     {{ pages[settings.size_chart].content }}
   {% endif %}
+  </div>
 
 </div>

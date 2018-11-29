@@ -10,7 +10,6 @@
   <div class="six columns offset-by-five animated fadeInUp" id="login_form">
 
     {% form 'customer_login' %}
-{% include 'oxi-social-login' %}
       {{ form.errors | default_errors }}
 
       <label for="customer_email" class="login">{{ 'customer.login.email' | t }}</label>
@@ -59,19 +58,26 @@
             {% assign reset_success = true %}
           {% endif %}
 
-          <div id="recover_email" class="clearfix large_form">
-            <label for="email" class="large">{{ 'customer.recover_password.email' | t }}</label>
-            <input type="email" value="" size="30" name="email" id="recover-email" class="large" autocorrect="off" autocapitalize="off" />
-          </div>
+          {% if reset_success %}
+            <p>
+              <em class="note">{{ 'customer.recover_password.success' | t }}</em>
+            </p>
+          {% else %}
+            <div id="recover_email" class="clearfix large_form">
+              <label for="email" class="large">{{ 'customer.recover_password.email' | t }}</label>
+              <input type="email" value="" size="30" name="email" id="recover-email" class="large" autocorrect="off" autocapitalize="off" />
+            </div>
+            <p>
+              <em class="note">{{ 'customer.recover_password.subtext' | t }}</em>
+            </p>
+            <div class="action_bottom">
+              <input class="btn action_button" type="submit" value="{{ 'customer.recover_password.submit' | t }}" />
+              <span class="note">{{ 'customer.recover_password.or' | t }} <a href="#" onclick="hideRecoverPasswordForm()">{{ 'customer.recover_password.cancel' | t }}</a></span>
+            </div>
+          {% endif %}
 
-          <p>
-            <em class="note">{{ 'customer.recover_password.subtext' | t }}</em>
-          </p>
 
-          <div class="action_bottom">
-            <input class="btn action_button" type="submit" value="{{ 'customer.recover_password.submit' | t }}" />
-            <span class="note">{{ 'customer.recover_password.or' | t }} <a href="#" onclick="hideRecoverPasswordForm()">{{ 'customer.recover_password.cancel' | t }}</a></span>
-          </div>
+
         {% endform %}
       </div>
     </div>

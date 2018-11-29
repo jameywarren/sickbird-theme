@@ -42,23 +42,11 @@
   {% assign size9 = '900x' %}
   {% assign size10 = '1000x' %}
 
-<div class="slider-gallery products-slider products-length-{{ products_length }} {% if settings.slideshow_button_style != true %}light-button{% endif %}"
+<div class="slider-gallery products-slider products-length-{{ products_length }} transparentBackground--{{settings.slideshow_button_style}}"
       data-products-per-slide="{{ visible_products }}"
       data-products-limit="{{ limit }}"
       data-products-available="{{ products_length }}">
   {% for product in products limit: loop_limit %}
-    {% if settings.align_height %}
-      {% assign collection_height = settings.collection_height | plus: 0 %}
-      {% assign product_aspect_ratio = product.featured_image.aspect_ratio | plus: 0 %}
-      {% assign product_set_width = product_aspect_ratio | times: collection_height %}
-
-      {% if product.featured_image.width >= product.featured_image.height %}
-        {% assign align_height_value = 'width: 100%; height: auto;' %}
-      {% else %}
-        {% assign align_height_value = 'width: 100%;' %}
-      {% endif %}
-
-    {% endif %}
 
     {% if product.id != skip_product.id %}
       {% assign feature_image = product.featured_image %}
@@ -66,11 +54,10 @@
         <div class="product-wrap">
           <div class="relative product_image swap-{{ settings.collection_secondary_image }}">
             <a href="{{ product.url | within: collection }}" itemprop="url">
-              <div class="image__container" style="{% if settings.align_height %} max-width: {{ product_set_width }}px; {% else %} max-width: {{- product.featured_image.width -}}px; {% endif %}">
+              <div class="image__container">
                 <img  src="{{ feature_image | product_img_url: '50x' }}"
                       alt="{{ product.title | escape }}"
                       class="lazyload {{ settings.image_loading_style }}"
-                      style="{{ align_height_value }} max-width: {{- product.featured_image.width -}}px;"
                       data-sizes="auto"
                       data-src="{{ feature_image | product_img_url: default }}"
                       data-srcset="

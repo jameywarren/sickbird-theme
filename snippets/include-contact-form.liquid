@@ -19,8 +19,8 @@
     <div class="feature_divider"></div>
   {% endif %}
 
-    <div class="contact-form_position--{{ textposition }}">
-      <div class="{% unless textposition == 'center' %}seven{% else %}ten offset-by-three{% endunless %} columns {% if contact_text_alignment == "center" %}center{% elsif contact_text_alignment == "right" %}align_right{% endif %}">
+    <div class="contact-form_position--{{ textposition }} {% unless textposition == 'center' %}seven{% else %}ten offset-by-three{% endunless %} columns">
+      <div class="{% if contact_text_alignment == "center" %}center{% elsif contact_text_alignment == "right" %}align_right{% endif %}">
         {% if contact_subheading != blank %}
           <h3>{{ contact_subheading }}</h3>
         {% endif %}
@@ -29,7 +29,7 @@
         {% endif %}
       </div>
     </div>
-    <div class="{% unless textposition == 'center' %}eight {% if textposition == 'left' %}offset-by-one{% endif %}{% else %}ten offset-by-three{% endunless %} columns omega">
+    <div class="{% unless textposition == 'center' %}eight {% if textposition == 'left' %}offset-by-one{% endif %}{% else %}ten offset-by-three{% endunless %} columns omega equal-columns--outside-trim">
       {% form 'contact' %}
         {% if form.posted_successfully? %}
           <p class="quote">{{ 'contact.form.post_success' | t }}</p>
@@ -55,12 +55,12 @@
            </ul>
         {% endif %}
 
-         <div class="{% if textposition == 'center' %}five{% else %}four{% endif %} columns alpha">
+         <div class="eight columns alpha">
           {% assign name_attr = 'contact.form.name' | handle %}
           <label for="contactFormName">{{ 'contact.form.name' | t }} <span class="red">*</span></label>
           <input type="text" id="contactFormName" name="contact[{{ name_attr }}]" placeholder="{{ 'contact.form.name' | t }}" autocapitalize="words" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.name }}{% endif %}" required="required">
          </div>
-         <div class="{% if textposition == 'center' %}five{% else %}four{% endif %} columns omega">
+         <div class="eight columns omega">
           <label for="contactFormEmail">{{ 'contact.form.email' | t }} <span class="red">*</span></label>
           <input type="email" id="contactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required="required">
          </div>

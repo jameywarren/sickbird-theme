@@ -5,17 +5,11 @@
 {% endcomment %}
 
 {% assign featured_promos_per_row = section.settings.featured_promos_per_row | minus: 0 %}
-{% assign featured_promos_grid_value = section.settings.featured_promos_grid %}
-{% if featured_promos_grid_value == true %}
-  {% assign featured_promos_grid = 'full_width' %}
-{% else %}
-  {% assign featured_promos_grid = 'standard' %}
-{% endif %}
 {% assign title_on_image = section.settings.promo_text_on_image_enabled %}
 
 {% if section.blocks.size > 0 %}
-  <div class="container promotions-grid-{{ featured_promos_grid }}">
-    <div  class="js-featured-promotions featured-promotions promo-per-row-{{ featured_promos_per_row }} clearfix"
+  <div class="featured-promotions container full-width--{{ section.settings.featured_promos_grid }}">
+    <div  class="js-featured-promotions promo-per-row-{{ featured_promos_per_row }} clearfix"
           data-promo-animation="{{ section.settings.featured_links_animation }}">
         {% for block in section.blocks %}
           <figure class="feature-section section-{{ forloop.index }} promo-{{ forloop.index }} title-overlay-{{ title_on_image }} {% if section.settings.featured_links_animation != blank %}promo-animation--true{% endif %}" {{ block.shopify_attributes }}>

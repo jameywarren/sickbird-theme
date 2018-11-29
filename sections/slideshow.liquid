@@ -16,12 +16,23 @@
 {% assign size9 = '1900x' %}
 {% assign size10 = '2000x' %}
 
+{% if section.settings.wide_display == false %}
+<div class="container">
+  <div class="sixteen columns">
+{% endif %}
+
 {% if section.blocks.size > 0 %}
   <section  id="homepage_slider-{{section.id}}"
-        class="homepage-slideshow js-homepage-slideshow slideshow_animation--{{ section.settings.slideshow_animation }} {% if section.settings.slideshow_text_animation != '' %}text-animation--true{% else %}text-animation--false{% endif %} {% if settings.slideshow_button_style != true %}light-button{% endif %}"
+        class="homepage-slideshow
+        js-homepage-slideshow
+        slideshow_animation--{{ section.settings.slideshow_animation }}
+        {% if section.settings.slideshow_text_animation != '' %}text-animation--true{% else %}text-animation--false{% endif %}
+        transparentBackground--{{settings.slideshow_button_style}}
+        full-width--{{ section.settings.wide_display }}"
         data-slider-id="homepage_slider-{{section.id}}"
         data-slideshow-speed="{{section.settings.slideshow_speed}}"
         data-slideshow-text-animation="{{section.settings.slideshow_text_animation}}"
+        data-adaptive-height="{{section.settings.activate_adaptiveHeight}}"
         >
     {% for block in section.blocks %}
         <div class="gallery-cell slide-{{ forloop.index }}" {{ block.shopify_attributes }} data-block-id="{{block.id}}">
@@ -102,12 +113,23 @@
   </section>
 {% endif %}
 
+{% if section.settings.wide_display == false %}
+  </div>
+</div>
+{% endif %}
+
 {% schema %}
 
 {
   "name": "Slideshow",
   "class": "slideshow-section under-menu",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "wide_display",
+      "label": "Wide display",
+      "default": true
+    },
     {
       "type": "select",
       "id": "slideshow_text_animation",
@@ -152,11 +174,17 @@
       "type": "range",
       "id": "slideshow_speed",
       "label": "Change slides every",
-      "min": 4,
+      "min": 0,
       "max": 12,
       "step": 1,
       "default": 6,
       "unit": "sec"
+    },
+    {
+      "type": "checkbox",
+      "id": "activate_adaptiveHeight",
+      "label": "Enable adaptive height",
+      "info": "Slideshow will adjust based on height of individual slides"
     }
   ],
   "blocks": [

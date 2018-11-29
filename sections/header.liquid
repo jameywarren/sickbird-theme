@@ -7,7 +7,9 @@
 <header id="header" class="mobile_nav-fixed--{{ section.settings.fixed_header }}">
   {% if section.settings.promo_text != blank %}
     <div class="promo_banner">
-      {{ section.settings.promo_text }}
+      <div class="promo_banner__content">
+        {{ section.settings.promo_text }}
+      </div>
       <div class="promo_banner-close"></div>
     </div>
   {% endif %}
@@ -30,14 +32,17 @@
         {{ shop.name }}
       {% endif %}
     </a>
-    {% if section.settings.search_enabled %}
-      <a href="/search" class="icon-search dropdown_link" title="{{ 'general.search.title' | t | escape }}" data-dropdown-rel="search"></a>
-    {% endif %}
-    {% if section.settings.show_cart %}
-      <div class="cart_container">
-        <a href="/cart" class="{% if section.settings.cart_icon == "cart" %}icon-cart{% else %}icon-bag{% endif %} mini_cart dropdown_link" title="{{ 'layout.general.cart' | t | escape }}" data-no-instant> <span class="cart_count">{{ cart.item_count }}</span></a>
-      </div>
-    {% endif %}
+    <div class="top_bar--right">
+      {% if section.settings.search_enabled %}
+        <a href="/search" class="icon-search dropdown_link" title="{{ 'general.search.title' | t | escape }}" data-dropdown-rel="search"></a>
+      {% endif %}
+      {% if section.settings.show_cart %}
+        <div class="cart_container">
+          <a href="/cart" class="{% if section.settings.cart_icon == "cart" %}icon-cart{% else %}icon-bag{% endif %} mini_cart dropdown_link" title="{{ 'layout.general.cart' | t | escape }}" data-no-instant> <span class="cart_count">{{ cart.item_count }}</span></a>
+        </div>
+      {% endif %}
+    </div>
+
   </div>
   {% if section.settings.search_enabled %}
     <div class="dropdown_container center" data-dropdown="search">
@@ -61,9 +66,7 @@
         {% if section.settings.phone_number != blank %}
           <li><a href="tel:+{{ section.settings.phone_number | replace: ' ', '' | replace: '+', '' | replace: '-', '' }}">{{ section.settings.phone_number }}</a></li>
         {% endif %}
-{% capture the_snippet_auth %}{% include 'socialshopwave-widget-auth' %}{% endcapture %}
-{% if the_snippet_auth contains 'Liquid error' %}
-    
+
         {% if shop.customer_accounts_enabled %}
           {% if customer %}
             <li>
@@ -83,37 +86,6 @@
             {% include 'currencies-switcher' %}
           </li>
         {% endif %}
-{% else %}
-        
-        
-    {% if shop.customer_accounts_enabled %}
-  <div id="ssw-topauth" class="ssw-topauth">
-    {% if customer %}
-      <div class="ssw-tprofile ssw-dropdown">
-        <a class="ssw-dropdown-toggle" data-toggle="ssw-dropdown" href="javascript:void(0);">
-          <i class="ssw-icon-user"></i>
-          {{ customer.first_name }}
-          {% if customer.last_name != 'Unknown' %}
-            {{ customer.last_name | slice:0 | upcase }}.
-          {% endif %}
-          <i class="ssw-icon-down-open-big"></i>
-        </a>
-        <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel">
-          <li id="customer_myorders_li"><a tabindex="-1" href="/account">{{ 'socialshopwave.my_orders' | t }}</a></li>
-          {% include 'ssw-widget-dropdown' %}
-          <li class="ssw-divider"></li>
-          <li><a id="customer_logout_link" tabindex="-1" href="/account/logout">{{ 'socialshopwave.logout' | t }}</a></li>
-        </ul>
-      </div>
-
-    {% else %}
-      <a id="customer_login_link" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">{{ 'socialshopwave.log_in' | t }}</a>
-    {% endif %}
-  </div>
-{% endif %}
-        
-        
-{% endif %}
       </ul>
     </div>
   </div>
@@ -140,7 +112,9 @@
   <div class="header {% if feature_image and settings.header_background == false %}is-absolute {% endif %} header-fixed--{{ section.settings.fixed_header }} {% if settings.header_background %}header-background--solid{% endif %}">
     {% if section.settings.promo_text != blank %}
       <div class="promo_banner">
-        {{ section.settings.promo_text }}
+        <div class="promo_banner__content">
+          {{ section.settings.promo_text }}
+        </div>
         <div class="promo_banner-close"></div>
       </div>
     {% endif %}
@@ -187,37 +161,41 @@
                             <img src="{{ item | img_url: '320x' }}" alt="{{ item.title | escape }}" />
                           </div>
                         {% endif %}
-                        <strong class="right price">
-                          {% if item.price < item.variant.compare_at_price %}
-                            <span class="money was_price">{{ item.variant.compare_at_price | money }}</span>
-                          {% endif %}
 
-                          <span class="money">{{ item.price | money }}</span>
-                        </strong>
-                        <div class="item_title">
-                          {{ item.product.title }}
-                          {% unless item.product.has_only_default_variant or item.variant.title contains "Title" %}
-                            -
-                            {% for option in item.product.options %}
-                              {{ item.variant.options[forloop.index0] }} {% unless forloop.last %}/{% endunless %}
-                            {% endfor %}
-                          {% endunless %}
-                          {% if item.properties %}
-                            {% for p in item.properties %}
-                              {% if p.last != blank %}
-                                <div class="line-item">
-                                  {{ p.first }}: {{ p.last }}
-                                </div>
-                              {% endif %}
-                            {% endfor %}
-                          {% endif %}
+                        <div class="cart_item__title">
+                          <div class="item_title">
+                            {{ item.product.title }}
+                            {% unless item.product.has_only_default_variant or item.variant.title contains "Title" %}
+                              -
+                              {% for option in item.product.options %}
+                                {{ item.variant.options[forloop.index0] }} {% unless forloop.last %}/{% endunless %}
+                              {% endfor %}
+                            {% endunless %}
+                            {% if item.properties %}
+                              {% for p in item.properties %}
+                                {% if p.last != blank %}
+                                  <div class="line-item">
+                                    {{ p.first }}: {{ p.last }}
+                                  </div>
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </a>
+                        <div class="left product-quantity-box">
+                          <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
+                          <input type="number" min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-line-id="{{ forloop.index }}" />
+                          <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
                         </div>
-                      </a>
-                      <div class="left product-quantity-box">
-                        <span class="ss-icon product-minus js-change-quantity" data-func="minus"><span class="icon-minus"></span></span>
-                        <input type="number" min="0" size="2" class="quantity" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-line-id="{{ forloop.index }}" />
-                        <span class="ss-icon product-plus js-change-quantity" data-func="plus"><span class="icon-plus"></span></span>
                       </div>
+
+                      <strong class="right price">
+                        {% if item.price < item.variant.compare_at_price %}
+                          <span class="money was_price">{{ item.variant.compare_at_price | money }}</span>
+                        {% endif %}
+
+                        <span class="money">{{ item.price | money }}</span>
+                      </strong>
                     </li>
                   {% endfor %}
                 </ul>
@@ -262,7 +240,11 @@
                       </div>
                     {% endif %}
 
-                    <input type="submit" class="action_button" value="{% if settings.go_to_checkout %}{{ 'layout.general.checkout' | t }}{% else %}{{ 'layout.general.go_to_cart' | t }}{% endif %}" />
+                    {% if settings.go_to_checkout %}
+                      <button type="submit" class="action_button add_to_cart">{% if settings.show_lock_icon %}<span class="icon-lock"></span>{% endif %}{{ 'layout.general.checkout' | t }}</button>
+                    {% else %}
+                      <button type="submit" class="action_button add_to_cart">{% if settings.show_lock_icon %}<span class="icon-lock"></span>{% endif %}{{ 'layout.general.go_to_cart' | t }} </button>
+                    {% endif %}
                   </li>
                 </ul>
               </form>
@@ -277,43 +259,11 @@
             {% include 'currencies-switcher' %}
           </li>
         {% endif %}
-        {% capture the_snippet_auth %}{% include 'socialshopwave-widget-auth' %}{% endcapture %}
-{% if the_snippet_auth contains 'Liquid error' %}
         {% if shop.customer_accounts_enabled %}
           <li>
             <a href="/account" class="icon-user" title="{{ 'layout.customer.my_account' | t }} {% if customer %}({{ customer.email }}){% endif %}"> <span>{% if customer %}{{ 'layout.customer.my_account' | t }}{% else %}{{ 'layout.customer.log_in' | t }}{% endif %}</span></a>
           </li>
         {% endif %}
-{% else %}
-        
-        
-    {% if shop.customer_accounts_enabled %}
-  <li id="ssw-topauth" class="ssw-topauth">
-    {% if customer %}
-      <div class="ssw-tprofile ssw-dropdown">
-        <a class="ssw-dropdown-toggle icon-user" data-toggle="ssw-dropdown" href="javascript:void(0);">  
-          {{ customer.first_name }}
-          {% if customer.last_name != 'Unknown' %}
-            {{ customer.last_name | slice:0 | upcase }}.
-          {% endif %}
-          <i class="ssw-icon-down-open-big"></i>
-        </a>
-        <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel" style="left: -50px">
-          <li id="customer_myorders_li"><a tabindex="-1" href="/account">{{ 'socialshopwave.my_orders' | t }}</a></li>
-          {% include 'ssw-widget-dropdown' %}
-          <li class="ssw-divider"></li>
-          <li><a id="customer_logout_link" tabindex="-1" href="/account/logout">{{ 'socialshopwave.logout' | t }}</a></li>
-        </ul>
-      </div>
-
-    {% else %}
-      <a id="customer_login_link" class="icon-user" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">  {{ 'socialshopwave.log_in' | t }}</a>
-    {% endif %}
-  </li>
-{% endif %}
-        
-        
-{% endif %}
       </ul>
     </div>
 
@@ -457,6 +407,10 @@
         width: 100%;
       }
     }
+  {% else %}
+    body {
+      overscroll-behavior-y: none;
+    }
   {% endif %}
 
 </style>
@@ -474,7 +428,8 @@
     {
       "type": "richtext",
       "id": "promo_text",
-      "label": "Text"
+      "label": "Text",
+      "info": "Maximum character limit is 170"
     },
     {
      "type": "header",
@@ -496,7 +451,7 @@
       "type": "link_list",
       "id": "top_bar_menu",
       "label": "Top bar menu",
-      "info": "This menu won't show dropdown items"
+      "info": "This menu won't show drop-down items"
     },
     {
       "type": "select",
@@ -596,6 +551,7 @@
       "type": "select",
       "id": "logo_position",
       "label": "Logo position",
+      "info": "Applies when menu position has been set to 'Inline with logo'",
       "options": [
         {
           "value": "left",
@@ -612,6 +568,7 @@
       "type": "select",
       "id": "logo_alignment",
       "label": "Logo alignment",
+      "info": "Applies when menu position has been set to 'Under logo'",
       "options": [
         {
           "value": "left",
